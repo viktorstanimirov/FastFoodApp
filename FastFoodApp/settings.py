@@ -15,7 +15,7 @@ SECRET_KEY = "django-insecure-jj3t1p$ew#ysm=&*kp(13+w@&(^47j2!#6#kn2s@#nhsxiuu&*
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["fastfoodapp-3fzz.onrender.com", "localhost",]
 
 # Application definition
 MY_APPS = [
@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'FastFoodApp.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL')  # Use the DATABASE_URL from your environment
+        default=os.getenv('DATABASE_URL')
     )
 }
 # else:
