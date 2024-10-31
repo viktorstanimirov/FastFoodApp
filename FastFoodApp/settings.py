@@ -13,9 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-jj3t1p$ew#ysm=&*kp(13+w@&(^47j2!#6#kn2s@#nhsxiuu&*"
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["fastfoodapp-3fzz.onrender.com", "localhost",]
+
+ALLOWED_HOSTS = ["fastfoodapp-3fzz.onrender.com", "127.0.0.1", "localhost"]
 
 # Application definition
 MY_APPS = [
@@ -24,8 +25,7 @@ MY_APPS = [
     'FastFoodApp.accounts',
     'FastFoodApp.cart',
     'FastFoodApp.core',
-    'bootstrap4'
-
+    'bootstrap4',
 ]
 
 INSTALLED_APPS = [
@@ -71,36 +71,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FastFoodApp.wsgi.application'
 
-# if DEBUG:
+if DEBUG == True:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv('DATABASE_NAME'),
+            "USER": os.getenv('DATABASE_USER'),
+            "PASSWORD": os.getenv('DATABASE_PASSWORD'),
+            "HOST": os.getenv('DATABASE_HOST'),
+            "PORT": os.getenv('DATABASE_PORT'),
+        }
+    }
+else:
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.getenv('DATABASE_NAME'),
-#         "USER": os.getenv('DATABASE_USER'),
-#         "PASSWORD": os.getenv('DATABASE_PASSWORD'),
-#         "HOST": os.getenv('DATABASE_HOST'),
-#         "PORT": os.getenv('DATABASE_PORT'),
-#     }
-# }
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.getenv('DATABASE_URL')
+        )
+    }
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL')
-    )
-}
-# else:
-#
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.postgresql",
-#             "NAME": os.getenv('AZURE_DATABASE_NAME'),
-#             "USER": os.getenv('AZURE_DATABASE_USER'),
-#             "PASSWORD": os.getenv('AZURE_DATABASE_PASSWORD'),
-#             "HOST": os.getenv('AZURE_DATABASE_HOST'),
-#             "PORT": os.getenv('AZURE_DATABASE_PORT'),
-#         }
-#     }
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -163,3 +152,23 @@ LOGOUT_REDIRECT_URL = 'index'
 # CELERY_ACCEPT_CONTENT = ['application/json']
 # CELERY_TASK_SERIALIZER = 'json'
 # CELERY_RESULT_SERIALIZER = 'json'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'error.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
