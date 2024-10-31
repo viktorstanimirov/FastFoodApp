@@ -11,10 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-jj3t1p$ew#ysm=&*kp(13+w@&(^47j2!#6#kn2s@#nhsxiuu&*"
 
-DEBUG = False
+DEBUG = True
 
 
-ALLOWED_HOSTS = ["fastfoodapp-3fzz.onrender.com", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["fastfoodapp-3fzz.onrender.com", "127.0.0.1"]
 
 # Application definition
 MY_APPS = [
@@ -69,26 +69,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FastFoodApp.wsgi.application'
 
-if DEBUG:
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
+}
 
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=os.getenv('DATABASE_URL')
-        )
-    }
-else:
-     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv('DATABASE_NAME'),
-            "USER": os.getenv('DATABASE_USER'),
-            "PASSWORD": os.getenv('DATABASE_PASSWORD'),
-            "HOST": os.getenv('DATABASE_HOST'),
-            "PORT": os.getenv('DATABASE_PORT'),
-        }
-    }
 
-    
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv('DATABASE_NAME'),
+#         "USER": os.getenv('DATABASE_USER'),
+#         "PASSWORD": os.getenv('DATABASE_PASSWORD'),
+#         "HOST": os.getenv('DATABASE_HOST'),
+#         "PORT": os.getenv('DATABASE_PORT'),
+#     }
+# }
+ 
+
+     
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -122,16 +122,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
- 
-if DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-else:
-    STATICFILES_DIRS = [
-    BASE_DIR / "staticfiles",
-    ]
+ 
+# if DEBUG:
+#     STATIC_URL = 'static/'
+#     STATICFILES_DIRS = [
+#     BASE_DIR / "staticfiles",
+#     ]
+    
+# else:
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
